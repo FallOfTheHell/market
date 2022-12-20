@@ -40,6 +40,7 @@
                     <button class="btn btn-outline-secondary btn-sm" ng-click="tryToLogout()">Выйти</button>
                 </li>
             </ul>
+            <button class="btn btn-outline-secondary btn-sm" ng-click="showCurrentUserInfo()">Обо мне</button>
         </div>
     </nav>
 
@@ -61,9 +62,8 @@
         <p></p>
         <button class="btn btn-outline-warning btn-sm" style="width: 100%;" type="submit">Применить</button>
     </form>
-
-    <h3>Каталог товаров</h3>
     <table class="table table-hover">
+        <h3>Каталог товаров</h3>
         <tr>
             <td>ID</td>
             <td>Название</td>
@@ -74,12 +74,40 @@
             <td>{{p.id}}</td>
             <td>{{p.title}}</td>
             <td>{{p.price}}</td>
+            <td>
+                <button class="btn btn-outline-danger" ng-click="deleteProduct(p.id)">Удалить</button>
+                <button type="button" class="btn btn-primary" ng-click="addToCart(p.id)">Добавить в корзину</button>
+            </td>
         </tr>
-
-        </tbody>
-    </table>
-
-    <button class="btn btn-danger" ng-click="showCurrentUserInfo()">Обо мне</button>
+        <p></p>
+        <table class="table table-hover" cellpadding="0" cellspacing="0">
+            <h3>Корина</h3>
+            <tr>
+                <td>Название</td>
+                <td>Количество</td>
+                <td>Цена</td>
+            </tr>
+            <tbody>
+            <tr ng-repeat="item in cart.items">
+                <td>{{item.productTitle}}</td>
+                <td>
+                    <button class="btn btn-primary" ng-click="changeQuantity(item.productId, -1)">-</button>
+                    {{item.quantity}}
+                    <button class="btn btn-primary" ng-click="changeQuantity(item.productId, 1)">+</button>
+                </td>
+                <td>{{item.pricePerProduct + ' x ' + item.quantity + ' = ' + item.price}}</td>
+                <td>
+                    <button type="button" class="btn btn-danger" ng-click="removeFromCart(item.productId)">Убрать из корзины</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Итого</td>
+                <td></td>
+                <td>{{cart.totalPrice}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-secondary" ng-click="clearCart()">Очистить корзину</button>
 </div>
 
 </body>
