@@ -19,6 +19,51 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         });
     };
 
+    $scope.deleteProduct = function (productId) {
+        $http.delete(contextPath + '/products/' + productId)
+            .then(function (response) {
+                $scope.loadProducts();
+            });
+    }
+
+    $scope.clearCart = function () {
+        $http.get('http://localhost:8189/market/api/v1/cart/clear').then(function (response) {
+            $scope.loadCart();
+        });
+    }
+
+    $scope.removeFromCart = function (productId) {
+        $http.get('http://localhost:8189/market/api/v1/cart/remove/' + productId).then(function (response) {
+            $scope.loadCart();
+        });
+    }
+
+    $scope.addToCart = function (productId) {
+        $http.get('http://localhost:8189/market/api/v1/cart/add/' + productId)
+            .then(function (response) {
+            $scope.loadCart();
+        });
+    }
+
+    $scope.loadCart = function () {
+        $http.get('http://localhost:8189/market/api/v1/cart').then(function (response) {
+            $scope.cart = response.data;
+        });
+    }
+
+    $scope.changeQuantity = function (productId, delta) {
+        $http({
+            url: contextPath + 'http://localhost:8189/market/api/v1/cart/change_quantity/',
+            method: 'GET',
+            params: {
+                studentId: productId,
+                delta: delta
+            }
+        }).then(function (response) {
+            $scope.loadCart();
+        });
+    }
+
     $scope.tryToAuth = function () {
         $http.post('http://localhost:8189/market/auth', $scope.user)
             .then(function successCallback(response) {
@@ -65,5 +110,6 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
             });
     }
 
+    $scope.loadCart();
     $scope.loadProducts();
 });
